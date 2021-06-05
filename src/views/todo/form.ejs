@@ -5,14 +5,29 @@
   <h1>
     <%= addAction ? 'Add' : 'Edit' %> todo
   </h1>
-  <input 
-    type="text" 
-    class="form-control" 
-    placeholder="task name" 
-    name="task"
-    value="<%= addAction ? "" : todo.task %>"
-    required
-  >
+  <div class="form-group">
+    <label>Task name</label>
+    <input 
+      type="text" 
+      class="form-control" 
+      placeholder="task name" 
+      name="task"
+      value="<%= addAction ? "" : todo.task %>"
+      required
+    >
+  </div>
+  <div class="form-group">
+    <label>Category</label>
+    <select class="form-control" aria-label="Default select example" name="category">
+      <option value="" <%= (addAction === false && todo.category) ? "" : "selected" %>>No category</option>
+      <% categories.forEach(function(category){ %>
+        <option 
+          value="<%= category._id %>"
+          <%= category.selected ? "selected" : ""%>
+        ><%= category.name %></option>
+      <% }) %>
+    </select>
+  </div>
   <input type="hidden" name="action" value="<%= addAction ? "add" : "edit"%>">
   <% if(addAction === false){ %>
     <input type="hidden" name="_id" value="<%= todo._id %>">

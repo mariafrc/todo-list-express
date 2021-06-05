@@ -1,0 +1,26 @@
+<% layout("layout/boilerplate") -%>
+<%- include("../layout/header.ejs") %>
+
+<form class="container mt-5 jumbotron" method="POST" action="/category/submit">
+  <h1>
+    <%= addAction ? 'Add' : 'Edit' %> category
+  </h1>
+  <input 
+    type="text" 
+    class="form-control" 
+    placeholder="category name" 
+    name="name"
+    value="<%= addAction ? "" : category.name %>"
+    required
+  >
+  <input type="hidden" name="action" value="<%= addAction ? "add" : "edit"%>">
+  <% if(addAction === false){ %>
+    <input type="hidden" name="_id" value="<%= category._id %>">
+  <% } %>
+  <div align="right" class="mt-2">
+    <a href="/category" class="btn btn-secondary">Back</a>
+    <button class="btn btn-primary">
+      <%= addAction ? 'Add' : 'Edit'%>
+    </button>
+  </div>
+</form>

@@ -22,7 +22,7 @@
       <% todos.forEach((todo)=>{ %>
         <tr>
           <td><%= todo.task %></td>
-          <td>...</td>
+          <td><%= todo.category?.name || "Aucune" %></td>
           <td style="width: 30%">
             <button class="btn btn-info">Check</button>
             <a class="btn btn-warning" href="/todo/edit/<%= todo._id %>">Edit</a>

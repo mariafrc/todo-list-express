@@ -4,6 +4,8 @@ const router = express.Router();
 //declarations
 const todoRoute = require("./routes/todo.route");
 router.use(todoRoute);
+const categoryRoute = require("./routes/category.route");
+router.use(categoryRoute);
 
 //404 redirect
 router.use(function(req, res, next) {
