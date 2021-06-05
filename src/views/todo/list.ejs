@@ -1,0 +1,36 @@
+<% layout("layout/boilerplate") -%>
+<%- include("../layout/header.ejs") %>
+
+<div class="container mt-5 jumbotron">
+  <div class="d-flex justify-content-between align-items-end">
+    <h1>Todo list</h1>
+    <a class="btn btn-primary" href="/todo/add">Add</a>
+  </div>
+  <hr>
+  <% if(todos.length === 0){ %>
+    <p align="center">No todo found</p>
+  <% } %>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th scope="col">Task</th>
+        <th scope="col">Category</th>
+        <th scope="col">Options</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% todos.forEach((todo)=>{ %>
+        <tr>
+          <td><%= todo.task %></td>
+          <td>...</td>
+          <td style="width: 30%">
+            <button class="btn btn-info">Check</button>
+            <a class="btn btn-warning" href="/todo/edit/<%= todo._id %>">Edit</a>
+            <form action="/todo/delete" method="POST" class="d-inline">
+              <button class="btn btn-danger" name="_id" value="<%= todo._id %>">Delete</button>
+            </form>
+          </td>
+        </tr>
+      <% }) %>
+  </table>
+</div>
