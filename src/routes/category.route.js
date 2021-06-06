@@ -5,7 +5,7 @@ const CategoryModel = require("../models/category.model");
 router.get("/category", function(req, res){
   CategoryModel.find()
     .then(function(response){
-      res.render("category/list", {categories: response});
+      res.render("pages/category/list", {categories: response});
     })
     .catch(function(err){
       console.log(err);
@@ -14,13 +14,13 @@ router.get("/category", function(req, res){
 })
 
 router.get("/category/add", function(req, res){
-  res.render("category/form", {addAction: true})
+  res.render("pages/category/form", {addAction: true})
 })
 
 router.get("/category/edit/:categoryId", function(req, res){
   CategoryModel.findOne({_id: req.params.categoryId})
     .then(function(response){
-      res.render("category/form", {addAction: false, category: response})
+      res.render("pages/category/form", {addAction: false, category: response})
     })
     .catch(function(err){
       console.log(err);

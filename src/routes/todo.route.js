@@ -32,7 +32,7 @@ router.get("/todo", function(req, res){
           }
         })
       }
-      res.render("todo/list", {categories: categories, todos: todos, query: requestQuery});
+      res.render("pages/todo/list", {categories: categories, todos: todos, query: requestQuery});
     })
     .catch(function(err){
       console.log(err);
@@ -43,7 +43,7 @@ router.get("/todo", function(req, res){
 router.get("/todo/add", function(req, res){
   CategoryModel.find()
     .then(function(response){
-      res.render("todo/form", {addAction: true, categories: response})
+      res.render("pages/todo/form", {addAction: true, categories: response})
     })
     .catch(function(err){
       console.log(err);
@@ -67,7 +67,7 @@ router.get("/todo/edit/:todoId", function(req, res){
           }
         })
       }
-      res.render("todo/form", {
+      res.render("pages/todo/form", {
         addAction: false, 
         categories: categories,
         todo: todo
