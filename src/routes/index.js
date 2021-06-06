@@ -2,10 +2,15 @@ const express = require("express");
 const router = express.Router();
 
 //declarations
-const todoRoute = require("./routes/todo.route");
+const todoRoute = require("./todo.route");
 router.use(todoRoute);
-const categoryRoute = require("./routes/category.route");
+
+const categoryRoute = require("./category.route");
 router.use(categoryRoute);
+
+const authRoute = require("./auth.route");
+router.use(authRoute);
+
 
 //404 redirect
 router.use(function(req, res, next) {

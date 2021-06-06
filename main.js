@@ -1,6 +1,6 @@
 const express = require('express');
 const app = express();
-const router = require("./src/router");
+const router = require("./src/routes/index");
 
 const dbConfig = require("./database.json");
 const mongoose = require("mongoose");
