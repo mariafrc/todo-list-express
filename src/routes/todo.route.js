@@ -3,11 +3,36 @@ const router = express.Router();
 const TodoModel = require("../models/todo.model");
 const CategoryModel = require("../models/category.model");
 
+function getTodoFilter(requestQuery){
+  let filter = {};
+  if(requestQuery.task){
+    filter.task = { $regex: requestQuery.task, $options: "i" } ;
+  }
+  if(requestQuery.category){
+    filter.category = requestQuery.category;
+  }
+  return filter;
+}
+
 router.get("/todo", function(req, res){
-  TodoModel.find()
-    .populate("category")
+  const requestQuery = req.query;
+  const todoFilter = getTodoFilter(requestQuery);
+
+  Promise.all([
+    CategoryModel.find(),
+    TodoModel.find(todoFilter).populate("category")
+  ])
     .then(function(response){
-      res.render("todo/list", {todos: response});
+      let categories = response[0];
+      let todos = response[1];
+      if(categories.length > 0 && requestQuery.category){
+        categories.forEach(function(category){
+          if(category._id.toString() === requestQuery.category){
+            category.selected = true
+          }
+        })
+      }
+      res.render("todo/list", {categories: categories, todos: todos, query: requestQuery});
     })
     .catch(function(err){
       console.log(err);
@@ -31,7 +56,10 @@ router.get("/todo/edit/:todoId", function(req, res){
     CategoryModel.find(),
     TodoModel.findOne({_id: req.params.todoId})
   ])
-    .then(function([categories, todo]){
+    .then(function(response){
+      let categories = response[0];
+      let todo = response[1];
+
       if(categories.length > 0 && todo.category){
         categories.forEach(function(category){
           if(category._id.toString() === todo.category.toString()){

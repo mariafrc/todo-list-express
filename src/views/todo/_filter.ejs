@@ -1,0 +1,34 @@
+<div class="container mt-5 jumbotron">
+  <h1>Filter</h1>
+  <hr>
+  <form action="/todo" method="GET">
+    <div class="list-filter">
+      <div class="form-group">
+        <label>name</label>
+        <input 
+          type="text" 
+          class="form-control" 
+          placeholder="task name" 
+          name="task"
+          value="<%= query.task ? query.task : "" %>"
+        >
+      </div>
+      <div class="form-group">
+        <label>category</label>
+        <select class="form-control" aria-label="Default select example" name="category">
+          <option value="" <%= query.category ? "" : "selected" %>>No category</option>
+          <% categories.forEach(function(category){ %>
+            <option 
+              value="<%= category._id %>"
+              <%= category.selected ? "selected" : ""%>
+            ><%= category.name %></option>
+          <% }) %>
+        </select>
+      </div>
+    </div>
+    <div align="right">
+      <a class="btn btn-secondary" href="/todo">reset</a>
+      <button class="btn btn-primary" type="submit">filter</button>
+    </div>
+  </form>
+</div>

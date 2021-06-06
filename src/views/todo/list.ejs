@@ -1,16 +1,16 @@
 <% layout("layout/boilerplate") -%>
 <%- include("../layout/header.ejs") %>
 
-<div class="container mt-5 jumbotron">
+<!-- filter -->
+<%- include("./_filter.ejs", query) %>
+
+<!-- list -->
+<div class="container mt-2 jumbotron">
   <div class="d-flex justify-content-between align-items-end">
     <h1>Todo list</h1>
     <a class="btn btn-primary" href="/todo/add">Add</a>
   </div>
-  <hr>
-  <% if(todos.length === 0){ %>
-    <p align="center">No todo found</p>
-  <% } %>
-  <table class="table table-striped">
+  <table class="table table-striped mt-2">
     <thead>
       <tr>
         <th scope="col">Task</th>
@@ -33,4 +33,7 @@
         </tr>
       <% }) %>
   </table>
+  <% if(todos.length === 0){ %>
+    <p align="center">No todo found</p>
+  <% } %>
 </div>
