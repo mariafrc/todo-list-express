@@ -1,30 +1,38 @@
-const express = require('express');
+const express = require("express");
 const app = express();
 const router = require("./src/routes/index");
 
-const dbConfig = require("./database.json");
+const dbConfig = require("./config/database.json");
 const mongoose = require("mongoose");
 
-const bodyParser = require('body-parser')
-const engine = require('ejs-mate')
+const bodyParser = require("body-parser")
+const engine = require("ejs-mate")
+
+const sessionMiddleware = require("./config/session");
+const authMiddleware = require("./config/auth");
 
 //static files
-app.use('/public', express.static('public'));
+app.use("/public", express.static("public"));
 
 //template engine
-app.engine('ejs', engine);
-app.set('views', './src/views');
-app.set('view engine', 'ejs');
+app.engine("ejs", engine);
+app.set("views", "./src/views");
+app.set("view engine", "ejs");
 
 // parse requests of content-type - application/json
 app.use(bodyParser.json());
 // parse requests of content-type - application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: true }));
+
 //set active path
 app.use(function(req, res, next){
   res.locals.active = req.path;
   next();
 })
+
+// add & configure session middleware and authentication
+app.use(sessionMiddleware);
+app.use(authMiddleware);
 
 //routes
 app.use(router);

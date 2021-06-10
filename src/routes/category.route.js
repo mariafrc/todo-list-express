@@ -3,7 +3,7 @@ const router = express.Router();
 const CategoryModel = require("../models/category.model");
 
 router.get("/category", function(req, res){
-  CategoryModel.find()
+  CategoryModel.find({user: req.session.userId})
     .then(function(response){
       res.render("pages/category/list", {categories: response});
     })
@@ -30,7 +30,10 @@ router.get("/category/edit/:categoryId", function(req, res){
 
 router.post("/category/submit", function(req, res){
   if(req.body.action === "add"){
-    CategoryModel.create({ name: req.body.name })
+    CategoryModel.create({ 
+      name: req.body.name,
+      user: req.session.userId
+    })
       .then(function(){
         res.redirect("/category");
       })
@@ -42,7 +45,8 @@ router.post("/category/submit", function(req, res){
     CategoryModel.updateOne(
       {_id: req.body._id}, 
       {
-        name: req.body.name
+        name: req.body.name,
+        user: req.session.userId
       }
     )
       .then(function(){

@@ -3,8 +3,8 @@ const router = express.Router();
 const TodoModel = require("../models/todo.model");
 const CategoryModel = require("../models/category.model");
 
-function getTodoFilter(requestQuery){
-  let filter = {};
+function getTodoFilter(userId, requestQuery){
+  let filter = {user: userId};
   if(requestQuery.task){
     filter.task = { $regex: requestQuery.task, $options: "i" } ;
   }
@@ -16,10 +16,11 @@ function getTodoFilter(requestQuery){
 
 router.get("/todo", function(req, res){
   const requestQuery = req.query;
-  const todoFilter = getTodoFilter(requestQuery);
+  const userId = req.session.userId;
+  const todoFilter = getTodoFilter(userId, requestQuery);
 
   Promise.all([
-    CategoryModel.find(),
+    CategoryModel.find({user: userId}),
     TodoModel.find(todoFilter).populate("category")
   ])
     .then(function(response){
@@ -41,7 +42,7 @@ router.get("/todo", function(req, res){
 })
 
 router.get("/todo/add", function(req, res){
-  CategoryModel.find()
+  CategoryModel.find({user: req.session.userId})
     .then(function(response){
       res.render("pages/todo/form", {addAction: true, categories: response})
     })
@@ -53,7 +54,7 @@ router.get("/todo/add", function(req, res){
 
 router.get("/todo/edit/:todoId", function(req, res){
   Promise.all([
-    CategoryModel.find(),
+    CategoryModel.find({user: req.session.userId}),
     TodoModel.findOne({_id: req.params.todoId})
   ])
     .then(function(response){
@@ -84,7 +85,8 @@ router.post("/todo/submit", function(req, res){
     TodoModel.create({
       task: req.body.task,
       category: req.body.category || null,
-      completed: false
+      completed: false,
+      user: req.session.userId
     })
       .then(function(){
         res.redirect("/todo");
@@ -97,6 +99,7 @@ router.post("/todo/submit", function(req, res){
     TodoModel.updateOne(
       {_id: req.body._id}, 
       {
+        user: req.session.userId,
         task: req.body.task, 
         category: req.body.category || null
       }
