@@ -21,10 +21,14 @@
     <tbody>
       <% todos.forEach((todo)=>{ %>
         <tr>
-          <td><%= todo.task %></td>
+          <td class="todo-name <%= todo.completed ? "todo-completed" : "" %>">
+            <%= todo.task %>
+          </td>
           <td><%= todo.category?.name || "No category" %></td>
           <td style="width: 30%">
-            <button class="btn btn-info">Check</button>
+            <button class="btn btn-info check-button" data-todo-id="<%= todo._id %>">
+              <%= todo.completed ? "Uncheck" : "Check" %>
+            </button>
             <a class="btn btn-warning" href="/todo/edit/<%= todo._id %>">Edit</a>
             <form action="/todo/delete" method="POST" class="d-inline">
               <button class="btn btn-danger" name="_id" value="<%= todo._id %>">Delete</button>
@@ -37,3 +41,33 @@
     <p align="center">No todo found</p>
   <% } %>
 </div>
+
+<script>
+  $(document).ready(function(){
+    $(".check-button").on("click", async function(button){
+      const buttonElement = $(this)
+      const todoId = buttonElement.data("todoId");
+      const completedValue = (buttonElement.html().trim() === "Check");
+
+      $.ajax({
+        type: "POST",
+        url: `/todo/check/${todoId}`,
+        data: {completed: completedValue},
+        dataType: "json",
+        success: function(){
+          toastr.success('Todo successfully updated');
+          buttonElement
+            .parent()
+            .siblings(".todo-name")
+            .toggleClass("todo-completed");
+
+          buttonElement.html(completedValue ? "Uncheck" : "Check");
+        },
+        error: function(err){
+          console.log(err);
+          toastr.warning('Internal server error');
+        }
+      })
+    })
+  })
+</script>

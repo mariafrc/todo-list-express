@@ -114,6 +114,22 @@ router.post("/todo/submit", function(req, res){
   }
 })
 
+router.post("/todo/check/:id", function(req, res){
+  TodoModel.updateOne(
+    {_id: req.params.id},
+    {$set: {
+      completed: req.body.completed
+    }}
+  )
+    .then(function(){
+      res.json({message: "update success"});
+    })
+    .catch(function(err){
+      console.log(err);
+      res.status(500).json({message: "internal server error"});
+    })
+})
+
 router.post("/todo/delete", function(req, res){
   TodoModel.deleteOne({_id: req.body._id})
     .then(function(){

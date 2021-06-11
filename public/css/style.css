@@ -14,3 +14,7 @@
   grid-column-gap: 5px;
   align-items: center;
 }
+
+.todo-completed{
+  text-decoration: line-through;
+}
