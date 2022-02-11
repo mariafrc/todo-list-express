@@ -25,7 +25,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 //set active path
-app.use(function(req, res, next){
+app.use(function (req, res, next) {
   res.locals.active = req.path;
   next();
 })
@@ -40,21 +40,21 @@ app.use(router);
 //server
 const APP_PORT = 3000;
 const database = `mongodb://${dbConfig.host}/${dbConfig.dbname}`;
+
+console.log(`Database config: ${database}`);
 mongoose
   .connect(database, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useFindAndModify: false,
   })
-  .then(function(){
-    console.log("Connexion à mongodb ok");
-    console.log(`Configuration: ${database}`);
+  .then(function () {
+    console.log("App is now connected to database");
     app.listen(APP_PORT, function () {
       console.log(`Server up and running on: http://localhost:${APP_PORT}/`);
     });
   })
-  .catch(function(err){
-    console.log("Erreur lors de la connexion à mongodb");
-    console.log(`Configuration: ${database}`);
+  .catch(function (err) {
+    console.log("Database connexion error");
     console.log(err);
   })
